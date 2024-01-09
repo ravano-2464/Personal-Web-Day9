@@ -52,34 +52,43 @@ function html(item) {
     <img src="${item.image}" class="profile-testimonial" />
     <p class="quote">"${item.content}"</p>
     <p class="author">- ${item.author}</p>
-    <p class="author">${item.rating} <i class="fa-solid fa-star"></i></p>
-</div>`
+    <p class="rating">${item.rating} <button class="rating-btn" data-rating="${item.rating}"><i class="fa-solid fa-star"></i></button></p>
+</div>`;
 }
 
 function allTestimonials() {
-    let testimonialHTML = ``
+    let testimonialHTML = ``;
     testimonialData.forEach((item) => {
-        testimonialHTML += html(item)
-    })
+        testimonialHTML += html(item);
+    });
 
-    document.getElementById("testimonials").innerHTML = testimonialHTML
+    document.getElementById("testimonials").innerHTML = testimonialHTML;
+
+    // Add event listeners to the rating buttons
+    const rating-Btn = document.querySelectorAll('.rating-btn');
+    ratingBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const rating = btn.getAttribute('data-rating');
+            filterTestimonials(rating);
+        });
+    });
 }
 
-allTestimonials()
+allTestimonials();
 
 function filterTestimonials(rating) {
-    let testimonialHTML = ``
+    let testimonialHTML = ``;
     const testimonialFiltered = testimonialData.filter((item) => {
-        return item.rating === rating
-    })
+        return item.rating === rating;
+    });
 
     if (testimonialFiltered.length === 0) {
-        testimonialHTML = `<h3> Data not found! </h3>`
+        testimonialHTML = `<h3> Data not found! </h3>`;
     } else {
         testimonialFiltered.forEach((item) => {
-            testimonialHTML += html(item)
-        })
+            testimonialHTML += html(item);
+        });
     }
 
-    document.getElementById("testimonials").innerHTML = testimonialHTML
+    document.getElementById("testimonials").innerHTML = testimonialHTML;
 }
