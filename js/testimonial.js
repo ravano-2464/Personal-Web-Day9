@@ -47,33 +47,6 @@
 
 // document.getElementById("testimonials").innerHTML = testimonialHTML
 
-const testimonialData = [
-    {
-        author: "Naufal",
-        content: "Keren banget jasanya! Top notch!",
-        image: "https://images.pexels.com/photos/3754285/pexels-photo-3754285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        rating: 5,
-    },
-    {
-        author: "Novri",
-        content: "Keren banget!",
-        image: "https://images.pexels.com/photos/3754285/pexels-photo-3754285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        rating: 5
-    },
-    {
-        author: "Denis",
-        content: "Apasih bang!",
-        image: "https://images.pexels.com/photos/3468827/pexels-photo-3468827.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        rating: 1
-    },
-    {
-        author: "Febry",
-        content: "Oke deh!",
-        image: "https://images.pexels.com/photos/3468827/pexels-photo-3468827.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        rating: 4
-    }
-]
-
 function html(item) {
     return `<div class="testimonial">
     <img src="${item.image}" class="profile-testimonial" />
