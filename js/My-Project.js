@@ -101,9 +101,6 @@ function renderMyProject() {
                         ${dataMyProject[index].technologies.map((tech) => `<li>${tech}</li>`).join('')}
                     </ul>
                 </div>
-                <div class="card-icons">
-                    ${renderTechImages(dataMyProject[index])}
-                </div>
             </div>
         </div>`;
     }
