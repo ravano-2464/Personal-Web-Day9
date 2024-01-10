@@ -47,48 +47,74 @@
 
 // document.getElementById("testimonials").innerHTML = testimonialHTML
 
-function html(item) {
-    return `<div class="testimonial">
+const testimonialDataUrl = 'https://api.npoint.io/2017734110c4bc68e0fb';
+
+async function fetchData(url) {
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
+
+function generateTestimonialHTML(item, additionalInfoCallback) {
+  let html = `<div class="testimonial">
     <img src="${item.image}" class="profile-testimonial" />
     <p class="quote">"${item.content}"</p>
     <p class="author">- ${item.author}</p>
-    <p class="rating">${item.rating} <button class="rating-btn" data-rating="${item.rating}"><i class="fa-solid fa-star"></i></button></p>
-</div>`;
+    <p class="author">${item.rating} <i class="fa-solid fa-star"></i></p>`;
+
+  if (additionalInfoCallback) {
+    html += additionalInfoCallback(item);
+  }
+
+  html += `</div>`;
+
+  return html;
 }
 
-function allTestimonials() {
-    let testimonialHTML = ``;
-    testimonialData.forEach((item) => {
-        testimonialHTML += html(item);
-    });
-
-    document.getElementById("testimonials").innerHTML = testimonialHTML;
-
-    // Add event listeners to the rating buttons
-    const rating-Btn = document.querySelectorAll('.rating-btn');
-    ratingBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const rating = btn.getAttribute('data-rating');
-            filterTestimonials(rating);
-        });
-    });
-}
-
-allTestimonials();
-
-function filterTestimonials(rating) {
-    let testimonialHTML = ``;
-    const testimonialFiltered = testimonialData.filter((item) => {
-        return item.rating === rating;
-    });
-
-    if (testimonialFiltered.length === 0) {
-        testimonialHTML = `<h3> Data not found! </h3>`;
-    } else {
-        testimonialFiltered.forEach((item) => {
-            testimonialHTML += html(item);
-        });
+async function allTestimonials() {
+  try {
+    const testimonialData = await fetchData(testimonialDataUrl);
+    let testimonialHTML = "";
+    for (const key in testimonialData) {
+      testimonialHTML += generateTestimonialHTML(testimonialData[key]);
     }
 
     document.getElementById("testimonials").innerHTML = testimonialHTML;
+  } catch (error) {
+    console.error("Error displaying testimonials:", error);
+  }
 }
+
+async function filterTestimonials(rating, additionalInfoCallback) {
+  try {
+    const testimonialData = await fetchData(testimonialDataUrl);
+    let testimonialHTML = '';
+    for (const key in testimonialData) {
+      if (testimonialData.hasOwnProperty(key) && testimonialData[key].rating === rating) {
+        const item = testimonialData[key];
+        testimonialHTML += generateTestimonialHTML(item, additionalInfoCallback);
+      }
+    }
+
+    if (testimonialHTML === '') {
+      testimonialHTML = `<h3>Data not found!</h3>`;
+    }
+
+    document.getElementById('testimonials').innerHTML = testimonialHTML;
+  } catch (error) {
+    console.error("Error filtering testimonials:", error);
+  }
+}
+
+async function additionalInfo(item) {
+  return `<p class="additional-info">High Rating Testimonial</p>`;
+}
+
+allTestimonials();
