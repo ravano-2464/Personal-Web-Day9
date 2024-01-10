@@ -30,6 +30,16 @@ function getDistanceTime(time) {
     }
 }
 
+function durationInDays(startDate, endDate) {
+    const oneDay = 1000 * 60 * 60 * 24;
+
+    const startDateMs = new Date(startDate).getTime();
+    const endDateMs = new Date(endDate).getTime();
+    const durationMs = endDateMs - startDateMs;
+
+    return Math.floor(durationMs / oneDay);
+}
+
 let dataMyProject = [];
 
 function submitData(event) {
@@ -40,6 +50,12 @@ function submitData(event) {
     const description = document.getElementById("inputContent");
     const technologies = document.querySelectorAll("input[type=checkbox]:checked");
     const image = document.getElementById("inputImage");
+    const duration = document.getElementById("inputDuration")
+
+    if (projectName === "" || startDate === "" || endDate === "" || description === "" || technologies === "" || image.length === 0) {
+        alert("Please fill in all fields correctly!!!");
+        return;
+    }
 
     if (projectName && startDate && endDate && description && technologies && image && image.files.length > 0) {
         const projectNameValue = projectName.value;
@@ -48,17 +64,19 @@ function submitData(event) {
         const descriptionValue = description.value;
         const technologiesValue = Array.from(technologies).map((tech) => tech.value);
         const imageValue = image.files[0];
+        const durationValue = durationInDays(startDate, endDate);
 
         if (imageValue) {
             const imageUrl = URL.createObjectURL(imageValue);
 
-            console.log(projectNameValue, startDateValue, endDateValue, descriptionValue, technologiesValue, imageUrl);
+            console.log(projectNameValue, startDateValue, endDateValue, descriptionValue, durationValue, technologiesValue, imageUrl);
 
             const MyProject = {
                 title: projectNameValue, 
                 content: descriptionValue,
                 technologies: technologiesValue,
                 image: imageUrl,
+                duration: durationValue,
                 postAt: new Date(),
                 author: "Ravano Akbar Widodo"
             }
@@ -88,16 +106,16 @@ function renderMyProject() {
                 <h1>
                     <a href="My-Project-detail.html" target="_blank">${dataMyProject[index].title}</a>
                 </h1>
+                <h3>Duration: ${dataMyProject[index].duration}</h3>
                 <div class="detail-My-Project-content">
                     ${dataMyProject[index].postAt} | ${dataMyProject[index].author}
                 </div>
                 <p style="text-align: center;">
                    ${dataMyProject[index].content}
                 </p>
-                <br>
                 <div class="technologies">
                     <label>Technologies:</label>
-                    <ul>
+                    <ul style="text-align: center; list-style: none; padding: 0;">
                         ${dataMyProject[index].technologies.map((tech) => `<li>${tech}</li>`).join('')}
                     </ul>
                 </div>
