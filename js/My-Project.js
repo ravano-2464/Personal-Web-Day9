@@ -113,11 +113,17 @@ function renderMyProject() {
                 <p style="text-align: center;">
                    ${dataMyProject[index].content}
                 </p>
+                <br>
                 <div class="technologies">
                     <label>Technologies:</label>
                     <ul style="text-align: center; list-style: none; padding: 0;">
                         ${dataMyProject[index].technologies.map((tech) => `<li>${tech}</li>`).join('')}
                     </ul>
+                </div>
+                <div class="card-icons">
+                     <i class="fa-brands fa-google-play fa-xl"></i>
+                     <i class="fa-brands fa-android fa-xl"></i>
+                     <i class="fa-brands fa-java fa-lg"></i>
                 </div>
             </div>
         </div>`;
