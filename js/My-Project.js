@@ -1,34 +1,25 @@
 function getDistanceTime(time) {
-    const timeNow = new Date().getTime(); // jam sekarang miliseconds
-    const timePosted = time;
+    const timeNow = new Date().getTime();
+    const timePosted = new Date(time).getTime(); // convert input time to milliseconds
 
-    const distance = timeNow - timePosted; // miliseconds
-
-    // Math :
-    // floor -> dibulatkan ke bawah, ex : 8.6 -> 8
-    // round -> dibulatkan angka terdekat, ex : 8.3 -> 8
-    // ceil -> dibulatkan ke atas, ex : 8.3 -> 9
+    const distance = timeNow - timePosted;
 
     const distanceSeconds = Math.floor(distance / 1000);
     const distanceMinutes = Math.floor(distance / 1000 / 60);
     const distanceHours = Math.floor(distance / 1000 / 60 / 60);
-    const distanceDay = Math.floor(distance / 1000 / 60 / 60 / 24);
+    const distanceDays = Math.floor(distance / 1000 / 60 / 60 / 24);
 
-    console.log("distanceSeconds", distanceSeconds);
-    console.log("distanceMinutes", distanceMinutes);
-    console.log("distanceHours", distanceHours);
-    console.log("distanceDay", distanceDay);
-
-    if (distanceDay > 0) {
-        return `${distanceDay} day ago`;
+    if (distanceDays > 0) {
+        return `${distanceDays} day${distanceDays > 1 ? 's' : ''} ago`;
     } else if (distanceHours > 0) {
-        return `${distanceHours} hours ago`;
+        return `${distanceHours} hour${distanceHours > 1 ? 's' : ''} ago`;
     } else if (distanceMinutes > 0) {
-        return `${distanceMinutes} minutes ago`;
+        return `${distanceMinutes} minute${distanceMinutes > 1 ? 's' : ''} ago`;
     } else {
-        return `${distanceSeconds} seconds ago `;
+        return `${distanceSeconds} second${distanceSeconds > 1 ? 's' : ''} ago`;
     }
 }
+
 
 function durationInDays(startDate, endDate) {
     const oneDay = 1000 * 60 * 60 * 24;
@@ -38,6 +29,16 @@ function durationInDays(startDate, endDate) {
     const durationMs = endDateMs - startDateMs;
 
     return Math.floor(durationMs / oneDay);
+}
+
+function durationInSeconds(startDate, endDate) {
+    const oneSecond = 1000;
+
+    const startDateMs = new Date(startDate).getTime();
+    const endDateMs = new Date(endDate).getTime();
+    const durationMs = endDateMs - startDateMs;
+
+    return Math.floor(durationMs / oneSecond);
 }
 
 let dataMyProject = [];
@@ -64,7 +65,7 @@ function submitData(event) {
         const descriptionValue = description.value;
         const technologiesValue = Array.from(technologies).map((tech) => tech.value);
         const imageValue = image.files[0];
-        const durationValue = durationInDays(startDate, endDate);
+        const durationValue = getDistanceTime(startDateValue, endDateValue);
 
         if (imageValue) {
             const imageUrl = URL.createObjectURL(imageValue);
@@ -107,6 +108,7 @@ function renderMyProject() {
                     <a href="My-Project-detail.html" target="_blank">${dataMyProject[index].title}</a>
                 </h1>
                 <h3>Duration: ${dataMyProject[index].duration}</h3>
+                <br>
                 <div class="detail-My-Project-content">
                     ${dataMyProject[index].postAt} | ${dataMyProject[index].author}
                 </div>
