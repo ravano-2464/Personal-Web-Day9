@@ -1,44 +1,24 @@
-function getDistanceTime(time) {
+function getDistanceTime(startTime) {
     const timeNow = new Date().getTime();
-    const timePosted = new Date(time).getTime(); // convert input time to milliseconds
+    const timePosted = new Date(startTime).getTime();
 
-    const distance = timeNow - timePosted;
+    const distanceSeconds = Math.floor((timeNow - timePosted) / 1000);
+    const distanceMinutes = Math.floor(distanceSeconds / 60);
+    const distanceHours = Math.floor(distanceMinutes / 60);
+    const distanceDays = Math.floor(distanceHours / 24);
+    const distanceYears = Math.floor(distanceDays / 365);
 
-    const distanceSeconds = Math.floor(distance / 1000);
-    const distanceMinutes = Math.floor(distance / 1000 / 60);
-    const distanceHours = Math.floor(distance / 1000 / 60 / 60);
-    const distanceDays = Math.floor(distance / 1000 / 60 / 60 / 24);
-
-    if (distanceDays > 0) {
-        return `${distanceDays} day${distanceDays > 1 ? 's' : ''} ago`;
+    if (distanceYears > 0) {
+        return `${distanceYears} Year'${distanceYears > -1 ? 's' : ''} Ago`;
+    } else if (distanceDays > 0) {
+        return `${distanceDays} Day'${distanceDays > -1 ? 's' : ''} Ago`;
     } else if (distanceHours > 0) {
-        return `${distanceHours} hour${distanceHours > 1 ? 's' : ''} ago`;
+        return `${distanceHours} Hour'${distanceHours >  -1 ? 's' : ''} Ago`;
     } else if (distanceMinutes > 0) {
-        return `${distanceMinutes} minute${distanceMinutes > 1 ? 's' : ''} ago`;
+        return `${distanceMinutes} Minute'${distanceMinutes > -1 ? 's' : ''} Ago`;
     } else {
-        return `${distanceSeconds} second${distanceSeconds > 1 ? 's' : ''} ago`;
+        return `${distanceSeconds} Second'${distanceSeconds !== -1 ? 's' : ''} Ago`;
     }
-}
-
-
-function durationInDays(startDate, endDate) {
-    const oneDay = 1000 * 60 * 60 * 24;
-
-    const startDateMs = new Date(startDate).getTime();
-    const endDateMs = new Date(endDate).getTime();
-    const durationMs = endDateMs - startDateMs;
-
-    return Math.floor(durationMs / oneDay);
-}
-
-function durationInSeconds(startDate, endDate) {
-    const oneSecond = 1000;
-
-    const startDateMs = new Date(startDate).getTime();
-    const endDateMs = new Date(endDate).getTime();
-    const durationMs = endDateMs - startDateMs;
-
-    return Math.floor(durationMs / oneSecond);
 }
 
 let dataMyProject = [];
@@ -51,9 +31,8 @@ function submitData(event) {
     const description = document.getElementById("inputContent");
     const technologies = document.querySelectorAll("input[type=checkbox]:checked");
     const image = document.getElementById("inputImage");
-    const duration = document.getElementById("inputDuration")
 
-    if (projectName === "" || startDate === "" || endDate === "" || description === "" || technologies === "" || image.length === 0) {
+    if (projectName === "" || startDate === "" || endDate === "" || description === "" || technologies === "" || image.files.length === 0) {
         alert("Please fill in all fields correctly!!!");
         return;
     }
@@ -63,27 +42,30 @@ function submitData(event) {
         const startDateValue = startDate.value;
         const endDateValue = endDate.value;
         const descriptionValue = description.value;
-        const technologiesValue = Array.from(technologies).map((tech) => tech.value);
+        const technologiesValue = Array.from(technologies).map(
+            (tech) => tech.value
+        );
         const imageValue = image.files[0];
+        const postAt = new Date();
         const durationValue = getDistanceTime(startDateValue, endDateValue);
 
         if (imageValue) {
             const imageUrl = URL.createObjectURL(imageValue);
 
-            console.log(projectNameValue, startDateValue, endDateValue, descriptionValue, durationValue, technologiesValue, imageUrl);
-
             const MyProject = {
-                title: projectNameValue, 
+                title: projectNameValue,
                 content: descriptionValue,
                 technologies: technologiesValue,
                 image: imageUrl,
-                duration: durationValue,
-                postAt: new Date(),
-                author: "Ravano Akbar Widodo"
-            }
+                postAt: postAt,
+                author: "Ravano Akbar Widodo",
+                get duration() {
+                    return getDistanceTime(postAt);
+                }
+            };
 
             dataMyProject.push(MyProject);
-            console.log("dataMy-Project", dataMyProject)
+            console.log("My Project", dataMyProject);
             renderMyProject();
         }
     }
@@ -107,7 +89,7 @@ function renderMyProject() {
                 <h1>
                     <a href="My-Project-detail.html" target="_blank">${dataMyProject[index].title}</a>
                 </h1>
-                <h3>Duration: ${dataMyProject[index].duration}</h3>
+                <h3>Duration : ${dataMyProject[index].duration}</h3>
                 <br>
                 <div class="detail-My-Project-content">
                     ${dataMyProject[index].postAt} | ${dataMyProject[index].author}
@@ -116,9 +98,9 @@ function renderMyProject() {
                    ${dataMyProject[index].content}
                 </p>
                 <br>
-                <div class="technologies">
-                    <label>Technologies:</label>
-                    <ul style="text-align: center; list-style: none; padding: 0;">
+                <div class="technologies" style="text-align: center;">
+                    <label>Technologies :</label>
+                    <ul style="list-style: none; padding: 0;">
                         ${dataMyProject[index].technologies.map((tech) => `<li>${tech}</li>`).join('')}
                     </ul>
                 </div>
@@ -132,6 +114,8 @@ function renderMyProject() {
     }
 }
 
-setInterval(function() {
-    renderMyProject()
-}, 1000)
+renderMyProject();
+
+setInterval(() => {
+    renderMyProject();
+}, 1000);
