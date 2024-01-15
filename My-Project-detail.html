@@ -1,9 +1,13 @@
 <html>
 
 <head>
-    <title>My Project - Detail</title>
+    <title>Creating My Project Page - Detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/My-Project.css" />
     <link rel="icon" href="assets/icon/dumbways.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -13,25 +17,29 @@
                 <li>
                     <img src="assets/image/dumbways.png" style="height: 50px;" />
                 </li>
-                <li class="nav-link">
+                <li class="nav-link nav-collapse">
                     <a href="index.html">
-                        Home
-                    </a>
-                </li>
-                <li class="nav-link My-Project">
-                    <a href="My-Project.html">
-                        My Project
+                        <i class="fa fa-home"></i> Home
                     </a>
                 </li>
                 <li class="nav-link nav-collapse">
-                    <a href="testimonial.html">Testimonials</a>
+                    <a href="My-Project.html" class="active">
+                        <i class="fa fa-desktop"></i> My Project
+                    </a>
                 </li>
             </ul>
             <div style="display: flex; width: 100%; justify-content: end;">
-                <a href="contact.html" class="btn-contact">Contact me</a>
+                <a href="contact.html" class="btn-contact nav-collapse" ><i class="fa fa-phone"></i> Contact Me</a>
+                <i class="fa-solid fa-bars fa-2x" style="cursor: pointer;" id="hamburger-button" onclick="openHamburger()"></i>
             </div>
         </div>
     </nav>
+    <div class="hamburger-nav-container" id="hamburger-nav-container">
+        <a href="index.html"><i class="fa fa-home"></i> Home</a>
+        <a href="My-Project.html" class="active"><i class="fa fa-desktop"></i> My Project</a>
+        <a href="testimonial.html"><i class="fa fa-star"></i> Testimonials</a>
+        <a href="contact.html"><i class="fa fa-phone"></i> Contact Me</a>
+    </div>
 
     <div class="My-Project-detail">
         <div class="My-Project-detail-container">
