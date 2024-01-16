@@ -366,7 +366,7 @@
 @media only screen and (max-width: 500px) {
     .nav-collapse {
         display: none;
-        width: 5px
+        width: 5px;
     }
     
     #hamburger-button {
